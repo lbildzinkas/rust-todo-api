@@ -1,0 +1,7 @@
+FROM rust:1.62-slim-buster
+WORKDIR /src/
+COPY . .
+
+RUN cargo install --path .
+
+CMD ["rust-todo-api"]
