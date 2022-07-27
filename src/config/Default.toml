@@ -1,2 +1,2 @@
-[db]
-connection_string=""
+[http]
+port=9090

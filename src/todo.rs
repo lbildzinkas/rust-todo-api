@@ -2,6 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 pub mod todo_http_handlers;
+pub mod todo_repository;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TodoItem {

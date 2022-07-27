@@ -1,25 +1,21 @@
 use std::io;
 
 use actix_web::{App, HttpServer};
-use rust_todo_api::todo::{self, todo_http_handlers};
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    connection: String,
-}
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            connection: Default::default(),
-        }
-    }
-}
+use rust_todo_api::configs::Configs;
+use rust_todo_api::todo::todo_http_handlers;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    let cfg: Config = confy::load("rust-todo-api").unwrap();
-    dbg!(cfg);
+    let configs_result = Configs::new();
+    let configs = match configs_result {
+        Ok(c) => c,
+        Err(error) => panic!("Error while reading the configuration files: {}", error),
+    };
+
+    let server_address = format!("0.0.0.0:{}", configs.http.port);
+
+    println!("Running debug mode: {}", configs.debug);
+    println!("Listening to: {}", server_address);
 
     HttpServer::new(|| {
         App::new()
@@ -30,7 +26,7 @@ async fn main() -> io::Result<()> {
             .service(todo_http_handlers::get_todo_by_id)
             .service(todo_http_handlers::new_todo)
     })
-    .bind("0.0.0.0:9090")?
+    .bind(server_address)?
     .run()
     .await
 }
