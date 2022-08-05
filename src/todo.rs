@@ -12,10 +12,17 @@ pub struct TodoItem {
     pub is_done: bool,
     pub due: DateTime<Utc>,
     pub created: DateTime<Utc>,
+    pub list_id: Uuid,
 }
 
 impl TodoItem {
-    pub fn new(title: String, description: String, is_done: bool, due: DateTime<Utc>) -> Self {
+    pub fn new(
+        title: String,
+        description: String,
+        is_done: bool,
+        due: DateTime<Utc>,
+        list_id: Uuid,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
             title,
@@ -23,6 +30,7 @@ impl TodoItem {
             is_done,
             due,
             created: chrono::offset::Utc::now(),
+            list_id,
         }
     }
 }
